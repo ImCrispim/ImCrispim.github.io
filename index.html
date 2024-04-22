@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO App</title>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        header,
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        main {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #0074d9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>TODO App</h1>
+    </header>
+    <main>
+        <form id="todo-form">
+            <input type="text" id="todo-input" placeholder="Digite uma tarefa">
+            <button type="submit">Adicionar</button>
+        </form>
+        <ul id="todo-list"></ul>
+    </main>
+    <footer>
+        <p>Desenvolvido por [Seu Nome]</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const todoForm = document.getElementById('todo-form');
+            const todoInput = document.getElementById('todo-input');
+            const todoList = document.getElementById('todo-list');
+
+            todoForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const todoText = todoInput.value.trim();
+                if (todoText !== '') {
+                    const li = document.createElement('li');
+                    li.textContent = todoText;
+                    todoList.appendChild(li);
+                    saveTodoToLocalStorage(todoText);
+                    todoInput.value = '';
+                }
+            });
+
+            function saveTodoToLocalStorage(todo) {
+                let todos;
+                if (localStorage.getItem('todos') === null) {
+                    todos = [];
+                } else {
+                    todos = JSON.parse(localStorage.getItem('todos'));
+                }
+                todos.push(todo);
+                localStorage.setItem('todos', JSON.stringify(todos));
+                displayTodos();
+            }
+
+            function displayTodos() {
+                const todos = JSON.parse(localStorage.getItem('todos'));
+                todoList.innerHTML = '';
+                if (todos !== null) {
+                    todos.forEach(function (todo) {
+                        const li = document.createElement('li');
+                        li.textContent = todo;
+                        todoList.appendChild(li);
+                    });
+                }
+            }
+
+            displayTodos();
+        });
+    </script>
+</body>
+
+</html>
